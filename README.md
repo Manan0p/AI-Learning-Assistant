@@ -1,4 +1,4 @@
-# AI Learning Assistant Backend
+# AI Learning Assistant
 
 Production-ready FastAPI backend for the Get Set Skilled AI Engineering Intern Assignment. It generates personalized learning roadmaps, recommends portfolio projects, and answers learner questions with retrieval-augmented generation over stored roadmap chunks.
 
