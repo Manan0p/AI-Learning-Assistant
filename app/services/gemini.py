@@ -59,17 +59,20 @@ class GeminiService:
             return []
         response = await self.client.aio.models.embed_content(
             model=settings.embedding_model,
+            # pyrefly: ignore [bad-argument-type]
             contents=texts,
             config=types.EmbedContentConfig(
                 task_type="RETRIEVAL_DOCUMENT",
                 output_dimensionality=settings.embedding_dimensions,
             ),
         )
+        # pyrefly: ignore [bad-return]
         return [embedding.values for embedding in response.embeddings or []]
 
     async def embed_query(self, text: str) -> list[float]:
         response = await self.client.aio.models.embed_content(
             model=settings.embedding_model,
+            # pyrefly: ignore [bad-argument-type]
             contents=[text],
             config=types.EmbedContentConfig(
                 task_type="RETRIEVAL_QUERY",
@@ -79,6 +82,7 @@ class GeminiService:
         embeddings = response.embeddings or []
         if not embeddings:
             raise LLMOutputError("Embedding service returned no vector.")
+        # pyrefly: ignore [bad-return]
         return embeddings[0].values
 
     async def _generate(self, *, system_prompt: str, user_prompt: str) -> str:
