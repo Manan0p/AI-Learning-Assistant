@@ -1,4 +1,4 @@
-PROJECT_SYSTEM_PROMPT = """You design realistic portfolio projects for AI engineering learners.
+PROJECT_SYSTEM_PROMPT = """You design realistic portfolio projects for technical learners.
 Return only valid JSON that matches the requested schema. No markdown fences."""
 
 PROJECT_USER_PROMPT = """Generate exactly one portfolio project.

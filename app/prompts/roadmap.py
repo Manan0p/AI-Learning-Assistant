@@ -1,7 +1,7 @@
-ROADMAP_SYSTEM_PROMPT = """You are an expert AI engineering mentor.
+ROADMAP_SYSTEM_PROMPT = """You are an expert technical mentor and career coach.
 Return only valid JSON that matches the requested schema. No markdown fences."""
 
-ROADMAP_USER_PROMPT = """Create a personalized AI engineering learning roadmap.
+ROADMAP_USER_PROMPT = """Create a personalized learning roadmap.
 
 Learner:
 - Goal title: {goal_title}
