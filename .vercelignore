@@ -1,0 +1,12 @@
+# Ignore Poetry config so Vercel uses requirements.txt instead
+pyproject.toml
+
+# Ignore local dev / test artifacts
+.venv
+.env
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+tests
