@@ -19,6 +19,15 @@ class LLMOutputError(AppError):
         super().__init__(message, status.HTTP_502_BAD_GATEWAY)
 
 
+class AIProviderError(AppError):
+    def __init__(self) -> None:
+        super().__init__(
+            "The AI provider (Google Gemini) is temporarily unavailable due to high demand. "
+            "This is not an issue with this service. Please try again in a few moments.",
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+
+
 def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(AppError)
     async def app_error_handler(_: Request, exc: AppError) -> ORJSONResponse:

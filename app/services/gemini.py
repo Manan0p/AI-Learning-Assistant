@@ -10,7 +10,7 @@ from loguru import logger
 from pydantic import BaseModel, ValidationError
 
 from app.core.config import settings
-from app.core.exceptions import LLMOutputError
+from app.core.exceptions import AIProviderError, LLMOutputError
 from app.services.cache import cache_key, get_redis
 from app.utils.json import extract_json_object
 
@@ -36,6 +36,7 @@ class GeminiService:
                 return response_model.model_validate_json(cached)
 
         last_error: Exception | None = None
+        provider_unavailable = False
         for attempt in range(1, settings.llm_max_retries + 1):
             try:
                 text = await self._generate(system_prompt=system_prompt, user_prompt=user_prompt)
@@ -54,12 +55,15 @@ class GeminiService:
             except genai_errors.ServerError as exc:
                 # 503 / 429 – transient Gemini overload, retry with backoff
                 last_error = exc
+                provider_unavailable = True
                 if attempt == settings.llm_max_retries:
                     break
                 sleep_for = min(2 ** attempt, 16)
                 logger.warning("Gemini transient error (attempt {}): {}. Retrying in {} s", attempt, exc, sleep_for)
                 await asyncio.sleep(sleep_for)
 
+        if provider_unavailable:
+            raise AIProviderError()
         logger.warning("LLM validation failed after retries: {}", last_error)
         raise LLMOutputError()
 
