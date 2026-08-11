@@ -124,32 +124,6 @@ http://localhost:8000/docs
 
 The API container runs Alembic migrations on startup.
 
-## Local Development
-
-With Poetry:
-
-```bash
-poetry install
-poetry run alembic upgrade head
-poetry run uvicorn app.main:app --reload
-```
-
-With pip:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-alembic upgrade head
-uvicorn app.main:app --reload
-```
-
-On Windows PowerShell, activate with:
-
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
 ## Quality Checks
 
 ```bash
