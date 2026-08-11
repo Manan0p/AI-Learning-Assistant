@@ -4,6 +4,7 @@ import asyncio
 from typing import Any, TypeVar
 
 from google import genai
+from google.genai import errors as genai_errors
 from google.genai import types
 from loguru import logger
 from pydantic import BaseModel, ValidationError
@@ -49,6 +50,14 @@ class GeminiService:
                     break
                 sleep_for = min(2 ** (attempt - 1), 8)
                 logger.debug("Retrying malformed LLM output in {} seconds", sleep_for)
+                await asyncio.sleep(sleep_for)
+            except genai_errors.ServerError as exc:
+                # 503 / 429 – transient Gemini overload, retry with backoff
+                last_error = exc
+                if attempt == settings.llm_max_retries:
+                    break
+                sleep_for = min(2 ** attempt, 16)
+                logger.warning("Gemini transient error (attempt {}): {}. Retrying in {} s", attempt, exc, sleep_for)
                 await asyncio.sleep(sleep_for)
 
         logger.warning("LLM validation failed after retries: {}", last_error)
